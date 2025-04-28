@@ -1,6 +1,6 @@
 import CryptoJS from 'crypto-js';
-import Logger from './logger';
-import { CONFIG } from './constants';
+import Logger from '../utils/logger';
+import { CONFIG } from '../utils/constants';
 
 
 export class TokenService {

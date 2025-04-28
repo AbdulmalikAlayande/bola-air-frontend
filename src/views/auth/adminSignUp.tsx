@@ -4,8 +4,8 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router';
 import Logger from '@src/utils/logger';
-import AuthInput from '../reusables/authInput';
-import CallToActionButton from '../reusables/callToActionButton';
+import AuthInput from '../components/reusables/authInput';
+import CallToActionButton from '../components/reusables/callToActionButton';
 import { CONFIG } from '@/utils/constants';
 
 type SignUpData = {

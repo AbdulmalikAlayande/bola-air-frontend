@@ -13,6 +13,19 @@ export default defineConfig({
         open: false,
         port: 3000
     },
+    define: {
+        global: "window",
+        'process.env': {
+            NODE_ENV: process.env.NODE_ENV,
+            VITE_TOKEN_SECRET: process.env.VITE_TOKEN_SECRET,
+            VITE_SERVER_BASE_URL: process.env.VITE_SERVER_BASE_URL,
+        },
+        'import.meta.env': {
+            NODE_ENV: process.env.NODE_ENV,
+            VITE_TOKEN_SECRET: process.env.VITE_TOKEN_SECRET,
+            VITE_SERVER_BASE_URL: process.env.VITE_SERVER_BASE_URL, 
+        },
+    },
     build: {
         outDir: 'dist',
     },

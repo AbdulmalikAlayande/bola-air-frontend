@@ -2,9 +2,9 @@ import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
 import { CONFIG } from '@src/utils/constants';
-import { ApiClient } from '@src/utils/apiClient';
+import { ApiClient } from '@/lib/apiClient';
 import { toast } from 'react-toastify';
-import Logger from '../../../utils/logger';
+import Logger from '../../utils/logger';
 import { userDetailsStore } from '@src/store/userDetailsStore';
 
 const ActivateUserAccount = () => {
@@ -46,7 +46,7 @@ const ActivateUserAccount = () => {
     const sendOTPToBackend = (otp: string) => {
     	const publicId = userDetailsStore.getState().publicId;
         axios
-            .post(`${CONFIG.production.HEROKU_SERVER_BASE_URL}customer/activate-account/${publicId}/${otp}`)
+            .post(`${CONFIG.production.SERVER_BASE_URL}customer/activate-account/${publicId}/${otp}`)
             .then(response => {
                 if (response.status === 200) {
                     Logger.debug(`${response.data}`);
@@ -75,7 +75,7 @@ const ActivateUserAccount = () => {
         try {
             const email = userDetailsStore.getState().email;
             
-            const apiClient = new ApiClient<object, {data: string}>(CONFIG.production.HEROKU_SERVER_BASE_URL, {params: {email: email}});
+            const apiClient = new ApiClient<object, {data: string}>(CONFIG.production.SERVER_BASE_URL, {params: {email: email}});
             
             const response = await apiClient.post(`/auth/resend-otp`, {});
             

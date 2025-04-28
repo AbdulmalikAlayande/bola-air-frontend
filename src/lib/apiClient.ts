@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { TokenService } from './tokenService';
-import Logger from './logger';
+import Logger from '../utils/logger';
 
 export class ApiClient<REQ, RES> {
     

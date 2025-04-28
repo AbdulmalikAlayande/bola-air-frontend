@@ -1,12 +1,12 @@
 import React, { FormEvent, useState } from 'react';
-import AuthInput from '../reusables/authInput';
-import CallToActionButton from '../reusables/callToActionButton';
+import AuthInput from '../components/reusables/authInput';
+import CallToActionButton from '../components/reusables/callToActionButton';
 import { Icon } from '@iconify-icon/react';
 import { AxiosError } from 'axios';
 import { NavLink, useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import Logger from '@utils/logger';
-import { ApiClient } from '@src/utils/apiClient';
+import { ApiClient } from '@/lib/apiClient';
 import ThemeToggle from '@src/utils/themeToggle';
 import { CONFIG } from '@src/utils/constants';
 import Logo from '@src/assets/icons/tsx/Logo';
@@ -77,7 +77,7 @@ const SignUp = () => {
 
         try {
             const apiClient = new ApiClient<SignupData, SignupResponse>(
-                CONFIG.production.HEROKU_SERVER_BASE_URL,
+                CONFIG.production.SERVER_BASE_URL,
                 {}
             );
             const response = await apiClient.post('customer/new', userData);

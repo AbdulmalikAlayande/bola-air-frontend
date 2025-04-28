@@ -1,4 +1,4 @@
-import { ApiClient } from "@/utils/apiClient";
+import { ApiClient } from "@/lib/apiClient";
 
 class PaymentError extends Error {
     constructor(message: string) {

@@ -42,7 +42,7 @@ const Reservations = () => {
     async function fetchReservations() {
         let result: Reservation[] | undefined = [];
         
-        await axios.get<Reservation[]>(`${CONFIG.production.HEROKU_SERVER_BASE_URL}customer/${param.userId}/reservations`, {
+        await axios.get<Reservation[]>(`${CONFIG.production.SERVER_BASE_URL}customer/${param.userId}/reservations`, {
             headers: {
 
             },

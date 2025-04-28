@@ -5,22 +5,21 @@ import PaymentConfirmation from './paymentConfirmation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Passenger, FlightReservationRequest } from '@src/views/types';
 import Navbar from '@/views/components/reusables/navbar';
-import { Label } from '@/components/ui/label';
-import SeatMap from './seatMap';
 import { AvailableFlight, Seat } from '@src/views/interfaces/interface';
 import Logger from '@/utils/logger';
-import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { useParams } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { availableFlights } from '@src/utils/placeholder';
-import { isToday, isTomorrow, format } from 'date-fns';
+// import { useSocketSubscription } from '@/hooks/useSocketSubscription';
 
 const BookFlight = () => {
     const params = useParams();
     const flightId = params.pid;
 
     const [currentStep, setCurrentStep] = useState(1);
+    // const update = useSocketSubscription<Seat>(`flights.${flightId}.seats`);
+
     const [selectedSeats, setSelectedSeats] = useState<Seat[]>([]);
     const [reservationRequest, setReservationRequest] = useState<FlightReservationRequest>({
         flightId: '',
@@ -82,16 +81,16 @@ const BookFlight = () => {
         },
     });
 
-    useEffect(() => {
-        if (data) {
-            setFlightDetails(data);
-            Logger.debug("Seats:: " + JSON.stringify(data.seats_));
-            setReservationRequest(prev => ({
-                ...prev,
-                flightId: data.publicId,
-            }));
-        }
-    }, [data]);
+    // useEffect(() => {
+    //     if (data) {
+            
+    //         setFlightDetails(data);
+    //         setReservationRequest(prev => ({
+    //             ...prev,
+    //             flightId: data.publicId,
+    //         }));
+    //     }
+    // }, [data]);
 
     const goToNextStep = () => {
         setCurrentStep(prev => Math.min(prev + 1, 3));
@@ -116,35 +115,10 @@ const BookFlight = () => {
         goToNextStep();
     };
 
-    function handleSeatMapSeatSelection(seat: Seat): void {
-        Logger.debug('Seat: ' + JSON.stringify(seat));
-
-        if (selectedSeats.length >= reservationRequest.passengers.length) {
-            toast.info('Maximum number of seats already selected', {
-                description:
-                    'You can only select up to ' + reservationRequest.passengers.length + ' seats.',
-                duration: 3000,
-                style: { backgroundColor: 'red', color: 'white' },
-            });
-        }
-        else if (selectedSeats.some(s => s.publicId === seat.publicId)) {
-            setSelectedSeats(prev => prev.filter(s => s.publicId !== seat.publicId));
-        }
-        else {
-            setSelectedSeats(prev => [...prev, seat]);
-        }
-    }
-
     // Add function to remove a seat
     const handleRemoveSeat = (seatId: string) => {
         setSelectedSeats(prev => prev.filter(seat => seat.publicId !== seatId));
     };
-
-    function formatFlightDate(date: Date) {
-        if (isToday(date)) return `Today, ${format(date, 'HH:mm')}`;
-        if (isTomorrow(date)) return `Tomorrow, ${format(date, 'HH:mm')}`;
-        return format(date, 'EEE, MMM d • HH:mm');
-    }
 
     const stepComponents = [
         <PassengerForm key="passenger-form" onSubmit={handlePassengersSubmit} />,
@@ -171,46 +145,11 @@ const BookFlight = () => {
             }
         >
             <Navbar />
-            <div className={'w-full h-[150vh] flex items-center justify-between px-4 py-8 gap-4'}>
-                <main className="w-full h-full lg:w-7/10 flex flex-col items-center justify-between">
-                    {/* Header with flight details */}
-                    <div className="w-full h-2/10">
-                        <div className="flex justify-between items-center">
-                            <Label className="text-lg md:text-xl font-bold">Book Your Flight</Label>
-                            <div className="flex items-center gap-2">
-                                <span className="text-sm opacity-80">Flight:</span>
-                                <span className="font-semibold">{flightDetails.flightNumber}</span>
-                            </div>
-                        </div>
-                        <div className="flex justify-between items-center mt-4">
-                            <div className="flex items-center gap-1">
-                                <span className="text-3xl font-bold">
-                                    {flightDetails.flight.departureAirport.iataCode}
-                                </span>
-                                <div className="flex items-center px-2">
-                                    <div className="w-2 h-2 rounded-full bg-black dark:bg-gray-50"></div>
-                                    <div className="w-16 h-0.5 bg-black dark:bg-gray-50"></div>
-                                    <div className="w-2 h-2 rounded-full bg-black dark:bg-gray-50"></div>
-                                </div>
-                                <span className="text-3xl font-bold">
-                                    {flightDetails.flight.arrivalAirport.iataCode}
-                                </span>
-                            </div>
-                            <div className="text-right">
-                                <div className="text-sm opacity-80">
-                                    {formatFlightDate(flightDetails.departureTime)}
-                                </div>
-                                <div className="font-medium">
-                                    {format(flightDetails.departureTime, 'h:mma') +
-                                        ' - ' +
-                                        format(flightDetails.arrivalTime, 'h:mma')}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+            <div className={'w-full flex items-center justify-between py-8 gap-4'}>
+                <main className="w-full h-full flex flex-col items-center justify-between">
+                    
                     {/* Progress Bar */}
-                    <div className="h-15/100 w-full px-6">
+                    <div className="h-15/100 w-full">
                         <div className="flex items-center justify-between">
                             {[
                                 { step: 1, label: 'Passenger Info' },
@@ -221,17 +160,7 @@ const BookFlight = () => {
                                     key={item.step}
                                     className="flex flex-col items-center relative w-full"
                                 >
-                                    {/* Line connector */}
-                                    {index < 2 && (
-                                        <div
-                                            className={`absolute top-4 left-[50%] w-[calc(100%-2rem)] h-0.5 
-                                            ${
-                                                currentStep > item.step
-                                                    ? 'bg-blue-500 dark:bg-blue-400'
-                                                    : 'bg-gray-200 dark:bg-gray-600'
-                                            }`}
-                                        ></div>
-                                    )}
+    
 
                                     {/* Step circle */}
                                     <div
@@ -246,6 +175,17 @@ const BookFlight = () => {
                                     >
                                         {currentStep > item.step ? '✓' : item.step}
                                     </div>
+                                    {/* Line connector */}
+                                    {index < 2 && (
+                                        <div
+                                            className={`absolute top-4 left-[50%] w-[100%] pl-4 h-0.5 
+                                            ${
+                                                currentStep > item.step
+                                                    ? 'bg-blue-500 dark:bg-blue-400'
+                                                    : 'bg-gray-200 dark:bg-gray-600'
+                                            }`}
+                                        ></div>
+                                    )}
 
                                     {/* Step label */}
                                     <span
@@ -264,7 +204,7 @@ const BookFlight = () => {
                     </div>
 
                     {/* Component Content */}
-                    <div className="h-65/100 w-full">
+                    <div className="w-full mt-10">
                         <AnimatePresence mode="sync">
                             <motion.div
                                 key={currentStep}
@@ -296,15 +236,6 @@ const BookFlight = () => {
                             </Button>
                         </div>
                     </div>
-                </main>
-
-                {/* Seat Map Display */}
-                <main className={'h-full hidden md:block w-3/10 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6'}>
-                    <SeatMap
-                        onSeatSelect={handleSeatMapSeatSelection}
-                        selectedSeats={selectedSeats}
-                        seats={flightDetails.seats_ ? flightDetails.seats_ : new Map<string, Seat[]>()}
-                    />
                 </main>
             </div>
         </div>

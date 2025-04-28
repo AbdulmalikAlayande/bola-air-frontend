@@ -9,12 +9,12 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router';
 
 import Dashboard from './views/components/users/customer/dashboard';
 import Profile from './views/components/users/customer/profile/profile';
-import AdminSignUp from './views/components/auth/adminSignUp';
+import AdminSignUp from './views/auth/adminSignUp';
 import Users from './views/components/users/admin/users/users';
 import AdminDashboard from './views/components/users/admin/dashboard';
-import Login from './views/components/auth/login';
-import SignUp from './views/components/auth/signUp';
-import ActivateUserAccount from './views/components/auth/activateUserAccount';
+import Login from './views/auth/login';
+import SignUp from './views/auth/signUp';
+import ActivateUserAccount from './views/auth/activateUserAccount';
 import PageTitle from './utils/pageTitle';
 import Reservations from './views/components/users/customer/dashboard/reservations';
 import NewReservation from './views/components/users/customer/dashboard/reservations/newReservation';

@@ -2,6 +2,7 @@ import ReactModal from 'react-modal';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { formatDuration, intervalToDuration } from 'date-fns';
+import { isToday, isTomorrow, format } from 'date-fns';
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -176,3 +177,10 @@ export const formatToDuration = (start: Date, end: Date) => {
         format: ['hours', 'minutes'],
     });
 };
+
+
+export function formatFlightDate(date: Date) {
+    if (isToday(date)) return `Today, ${format(date, 'HH:mm')}`;
+    if (isTomorrow(date)) return `Tomorrow, ${format(date, 'HH:mm')}`;
+    return format(date, 'EEE, MMM d • HH:mm');
+}

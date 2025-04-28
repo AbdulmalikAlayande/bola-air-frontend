@@ -10,9 +10,9 @@ interface SeatMapProps {
 }
 
 const seatStyles = {
-    EMPTY: { fill: '#bfdbfe', stroke: '#60a5fa' }, // Light blue for all available seats
-    SELECTED: { fill: '#4ade80', stroke: '#16a34a' }, // Green for selected seats
-    RESERVED: { fill: '#d1d5db', stroke: '#9ca3af', cursor: 'not-allowed' }, // Gray for unavailable seats
+    EMPTY: { fill: '#bfdbfe', stroke: '#60a5fa' }, // Light blue
+    SELECTED: { fill: '#4ade80', stroke: '#16a34a' }, // Green
+    RESERVED: { fill: '#d1d5db', stroke: '#9ca3af', cursor: 'not-allowed' }, // Gray
 };
 
 const seatSections = [
@@ -40,8 +40,26 @@ const SeatMap: React.FC<SeatMapProps> = ({ onSeatSelect, selectedSeats, seats })
         }
     }, [seats]);
 
+
+    // function handleSeatMapSeatSelection(seat: Seat): void {
+    
+    //     if (selectedSeats.length >= reservationRequest.passengers.length) {
+    //         toast.info('Maximum number of seats already selected', {
+    //             description:
+    //                 'You can only select up to ' + reservationRequest.passengers.length + ' seats.',
+    //             duration: 3000,
+    //             style: { backgroundColor: 'red', color: 'white' },
+    //         });
+    //     }
+    //     else if (selectedSeats.some(s => s.publicId === seat.publicId)) {
+    //         setSelectedSeats(prev => prev.filter(s => s.publicId !== seat.publicId));
+    //     }
+    //     else {
+    //         setSelectedSeats(prev => [...prev, seat]);
+    //     }
+    // }
+
     const handleSeatClick = (seat: Seat) => {
-        Logger.info("selected Seats:: "+JSON.stringify(selectedSeats.length))
         if (seat.status === 'RESERVED') 
             return;
         if (seat.status === 'SELECTED') {

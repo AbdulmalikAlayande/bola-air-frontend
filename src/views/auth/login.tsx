@@ -1,13 +1,13 @@
 import React, { FormEvent, useState } from 'react';
-import AuthInput from '../reusables/authInput';
-import CallToActionButton from '../reusables/callToActionButton';
+import AuthInput from '../components/reusables/authInput';
+import CallToActionButton from '../components/reusables/callToActionButton';
 import { Icon } from '@iconify-icon/react';
 import { NavLink, useNavigate } from 'react-router';
 import Logo from '@src/assets/icons/tsx/Logo';
 import ThemeToggle from '@src/utils/themeToggle';
 import { CONFIG } from '@src/utils/constants';
-import { ApiClient } from '@src/utils/apiClient';
-import { TokenService } from '@src/utils/tokenService';
+import { ApiClient } from '@/lib/apiClient';
+import { TokenService } from '@/lib/tokenService';
 import Logger from '@src/utils/logger';
 import { toast } from 'react-toastify';
 import { userDetailsStore } from '@src/store/userDetailsStore';
@@ -71,7 +71,7 @@ const Login = () => {
 
         try {
 
-            const apiClient = new ApiClient<LoginData, LoginResponse>(CONFIG.production.HEROKU_SERVER_BASE_URL, {});
+            const apiClient = new ApiClient<LoginData, LoginResponse>(CONFIG.production.SERVER_BASE_URL, {});
             const response = await apiClient.post('auth/login', data);
 	
 	    Logger.info("login:: Response data: "+JSON.stringify(response.data))
